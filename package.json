@@ -1,0 +1,24 @@
+{
+  "name": "dbd-user-client",
+  "version": "1.0.0",
+  "private": true,
+  "displayName": "DBD User Client",
+  "description": "A desktop client for authenticating and interacting with Dead by Daylight's private API across both Steam and Epic Games.",
+  "license": "MIT",
+  "author": "Eigenvoid (GitHub: EigenvoidDev)",
+  "type": "module",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node src/main.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "steamworks.js": "^0.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EigenvoidDev/dbd-user-client"
+  }
+}

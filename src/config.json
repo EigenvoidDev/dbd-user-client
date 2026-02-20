@@ -1,0 +1,41 @@
+{
+    "platforms": {
+        "steam": {
+            "headers": {
+                "Host": "steam.live.bhvrdbd.com",
+                "Accept": "*/*",
+                "Accept-Encoding": "deflate, gzip",
+                "Content-Type": "application/json",
+                "x-kraken-client-platform": "steam",
+                "x-kraken-client-provider": "steam",
+                "x-kraken-client-resolution": "2560x1600",
+                "x-kraken-client-timezone-offset": "300",
+                "x-kraken-client-os": "10.0.26100.1.768.64bit"
+            }
+        },
+        "egs": {
+            "client": {
+                "clientId": "xyza7891sHd847UxB4pnxZ30OhQEqMet",
+                "clientSecret": "IwX4H8ndCna4GTiD8LTY2OxjH2gpnnbKzq4Bhqd/ntE",
+                "deploymentId": "e5c7f466abde4f7ba13c2ffc71a1efc1",
+                "scope": "basic_profile friends_list openid presence"
+            },
+            "account": {
+                "devAuthToolCredentialsName": "YOUR_CREDENTIAL_NAME_HERE",
+                "exchangeCodeHost": "127.0.0.1",
+                "exchangeCodePort": "8080"
+            },
+            "headers": {
+                "Host": "egs.live.bhvrdbd.com",
+                "Accept": "*/*",
+                "Accept-Encoding": "deflate, gzip",
+                "Content-Type": "application/json",
+                "x-kraken-client-platform": "egs",
+                "x-kraken-client-provider": "egs",
+                "x-kraken-client-resolution": "2560x1600",
+                "x-kraken-client-timezone-offset": "300",
+                "x-kraken-client-os": "10.0.26100.1.768.64bit"
+            }
+        }
+    }
+}
