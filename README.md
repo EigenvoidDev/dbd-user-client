@@ -6,9 +6,7 @@
 
 ## Disclaimer
 
-As DBD User Client constitutes third-party software, its use carries inherent risks, including potential action against your Dead by Daylight account by Behaviour Interactive Inc. (BHVR), such as account suspension or permanent termination.
-
-This software is provided for educational and personal use only. By using it, you acknowledge and accept these risks and agree that you do so at your own discretion. The author assumes no responsibility or liability for any consequences resulting from its use.
+DBD User Client is not affiliated with or endorsed by Behaviour Interactive Inc. (BHVR) and constitutes third-party software. Its use carries inherent risks, including potential enforcement action against your Dead by Daylight account, up to and including suspension or termination. This software is provided for educational and personal use only. By using it, you acknowledge and accept these risks, agree to proceed at your own discretion, and release the author from any responsibility or liability for any consequences arising from its use.
 
 ## Installation
 
@@ -28,7 +26,7 @@ Before launching DBD User Client, ensure that:
 3. The account that you are logged in to owns Dead by Daylight.
 4. Dead by Daylight is installed and updated to the latest version.
 
-Once the above requirements are met, from the project's root directory, run:
+Once the above requirements are met, run the following command from the project's root directory:
 ```
 npm start
 ```
@@ -65,20 +63,20 @@ After setting up the Developer Authentication Tool, update your `config.json`:
 
 Ensure that Dead by Daylight is installed and updated to the latest version.
 
-Once configured, from the project's root directory, run:
+Once configured, run the following command from the project's root directory:
 ```
 npm start
 ```
 
 ## Client Data Version Configuration
 
-DBD User Client computes runtime header values to match the client data version expected by the API and applies them to outgoing requests.
+DBD User Client automatically computes runtime header values to match the client data version expected by the API and includes them in all outgoing requests.
 
-The primary runtime headers that control client data versioning are:
+The runtime headers that control client data versioning are:
 - `clientVersion`
 - `contentVersionPayload`
 
-If these values do not match the version expected by the API, affected requests will be rejected.
+If these values do not match the version expected by the API, the requests will be rejected.
 
 ### Manually Overriding Runtime Header Values
 
@@ -123,10 +121,10 @@ const contentVersionPayload = JSON.stringify({
 DBD User Client is designed for use with the live branch of Dead by Daylight. It does not support the Player Test Build (PTB) or any other branches.
 
 ### Internet Connection Required
-An active internet connection is required. The client communicates directly with BHVR's live API endpoints and cannot operate offline.
+The client requires an active internet connection to communicate with Dead by Daylight's live API endpoints.
 
 ### Steam Location Endpoint Limitation
-The `Get Location` endpoint is not supported when authenticating via Steam. This limitation applies only to the Steam platform.
+The `Get Location` endpoint is not supported when authenticating via Steam.
 
 ### Authentication Token Handling
 For security reasons, authentication tokens are invalidated when the application closes:
@@ -136,13 +134,13 @@ For security reasons, authentication tokens are invalidated when the application
 After closing the application, you must re-authenticate before issuing additional requests.
 
 ### User-Agent Requirements
-DBD User Client derives its `User-Agent` value from your local game installation by reading `DeadByDaylightVersionNumber.txt`.
+DBD User Client derives its `User-Agent` value from your local game installation by reading the `DeadByDaylightVersionNumber.txt` file.
 
 Default installation paths (Windows):
 - **Steam:** `C:\Program Files (x86)\Steam\steamapps\common\Dead by Daylight\DeadByDaylight\Content\Version\DeadByDaylightVersionNumber.txt`
 - **Epic Games:** `C:\Program Files\Epic Games\DeadByDaylight\DeadByDaylight\Content\Version\DeadByDaylightVersionNumber.txt`
 
-If the file is not found in the expected default location, you must manually provide the correct file path or supply the appropriate `DeadByDaylightVersionNumber.txt` file. The client cannot construct a valid `User-Agent` without it.
+If the file cannot be found at the default location, you must provide its file path manually. The client cannot construct a valid `User-Agent` without it.
 
 ## License
 
