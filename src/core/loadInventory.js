@@ -12,14 +12,14 @@ const __dirname = path.dirname(__filename);
 const configPath = path.join(__dirname, '../config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 
-export async function loadInventory(platform, bhvrSessionCookie, apiKey) {
+export async function loadInventory(platform, apiKey) {
     const platformConfig = config.platforms[platform];
     if (!platformConfig) {
         throw new Error(`Unsupported platform: ${platform}`);
     }
 
-    if (!bhvrSessionCookie || !apiKey) {
-        throw new Error('Missing Cookie or api-key required to load your inventory.');
+    if (!apiKey) {
+        throw new Error('Missing api-key required to load your inventory.');
     }
 
     const url = getPlatformUrl(platform, 'dbdInventories');
@@ -37,14 +37,14 @@ export async function loadInventory(platform, bhvrSessionCookie, apiKey) {
     const headers = {
         ...platformConfig.headers,
         'x-kraken-client-version': clientVersion,
-        'User-Agent': userAgent,
-        'Cookie': bhvrSessionCookie,
-        'api-key': apiKey
+        'x-kraken-analytics-dynamic-contents': '[""]',
+        'api-key': apiKey,
+        'User-Agent': userAgent
     };
 
     const body = JSON.stringify({
         clientOwnershipItemIds: [],
-        shouldQuerySteamworks: false
+        shouldQuerySteamworks: platform === 'steam'
     });
 
     const response = await fetch(url, {

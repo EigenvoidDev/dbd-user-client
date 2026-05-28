@@ -18,6 +18,9 @@ export async function login(platform, authToken) {
 
     const { clientVersion, contentVersion, contentSecretKey, userAgent } = runtimeHeaders;
 
+    const dynamicContentVariant =
+        platform === 'steam' ? 'Windows' : 'EGS';
+
     const missingHeaders = [];
     if (!clientVersion) missingHeaders.push('clientVersion');
     if (!contentVersion) missingHeaders.push('contentVersion');
@@ -44,6 +47,8 @@ export async function login(platform, authToken) {
         body = JSON.stringify({
             abortIfAlreadyLoggedInUnifiedAccount: true,
             clientData: {},
+            dynamicContentClientVersion: clientVersion,
+            dynamicContentVariant,
             token: authToken
         });
     } else {
@@ -57,7 +62,9 @@ export async function login(platform, authToken) {
         };
         body = JSON.stringify({
             abortIfAlreadyLoggedInUnifiedAccount: true,
-            clientData: {}
+            clientData: {},
+            dynamicContentClientVersion: clientVersion,
+            dynamicContentVariant
         });
     }
 
@@ -73,23 +80,12 @@ export async function login(platform, authToken) {
         throw new Error(`\nLogin failed:\n\n${JSON.stringify(result, null, 2)}`);
     }
 
-    const setCookieHeader = response.headers.get('set-cookie');
-    if (!setCookieHeader) {
-        throw new Error('\nLogin response did not return a "Set-Cookie" header.');
-    }
-
-    const bhvrSessionCookie = setCookieHeader.split(';')[0]?.trim();
-    if (!bhvrSessionCookie || !bhvrSessionCookie.startsWith('bhvrSession=')) {
-        throw new Error(`\nLogin response did not include a valid "bhvrSession" cookie. Received ${bhvrSessionCookie ?? 'nothing.'}`);
-    }
-
     const apiKey = result?.token ?? null;
     if (!apiKey) {
         throw new Error('\nLogin response did not include a "token".');
     }
 
     return {
-        bhvrSessionCookie,
         apiKey
     };
 }

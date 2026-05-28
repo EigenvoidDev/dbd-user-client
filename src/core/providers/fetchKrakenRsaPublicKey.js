@@ -12,14 +12,14 @@ const __dirname = path.dirname(__filename);
 const configPath = path.join(__dirname, '../../config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 
-export async function fetchKrakenRsaPublicKey(platform, bhvrSessionCookie, apiKey) {
+export async function fetchKrakenRsaPublicKey(platform, apiKey) {
     const platformConfig = config.platforms[platform];
     if (!platformConfig) {
         throw new Error(`Unsupported platform: ${platform}`);
     }
 
-    if (!bhvrSessionCookie || !apiKey) {
-        throw new Error('Missing Cookie or api-key required to fetch configuration.');
+    if (!apiKey) {
+        throw new Error('Missing api-key required to fetch configuration.');
     }
 
     const url = getPlatformUrl(platform, 'config');
@@ -37,9 +37,8 @@ export async function fetchKrakenRsaPublicKey(platform, bhvrSessionCookie, apiKe
     const headers = {
         ...platformConfig.headers,
         'x-kraken-client-version': clientVersion,
-        'User-Agent': userAgent,
-        'Cookie': bhvrSessionCookie,
-        'api-key': apiKey
+        'api-key': apiKey,
+        'User-Agent': userAgent
     };
 
     const response = await fetch(url, {

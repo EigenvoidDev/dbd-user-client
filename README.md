@@ -11,8 +11,17 @@ DBD User Client is not affiliated with or endorsed by Behaviour Interactive Inc.
 ## Installation
 
 1. Install [Node.js](https://nodejs.org/en/download) (v18 or later).
-2. Clone the repository.
-3. Run `npm install` in the project's root directory to install the required dependencies.
+
+2. Clone the repository:
+```
+git clone https://github.com/EigenvoidDev/dbd-user-client.git
+cd dbd-user-client
+```
+
+3. Install the required dependencies:
+```
+npm install
+```
 
 ## Platform Setup
 
@@ -82,15 +91,26 @@ If these values do not match the version expected by the API, the requests will 
 
 In some cases, you may need to manually override these values when the API expects a newer client data version than what is currently available in your local game installation.
 
-When performing a manual override, obtain the correct runtime header values from the content version API endpoint for your platform:
-- [Steam](https://steam.live.bhvrdbd.com/api/v1/utils/contentVersion/version)
-- [Epic Games](https://egs.live.bhvrdbd.com/api/v1/utils/contentVersion/version)
+Due to request restrictions, the content version API endpoints cannot be reliably accessed via a standard browser request. Use Hoppscotch to retrieve the required values.
+
+#### Retrieve Values via Hoppscotch
+
+1. Open [Hoppscotch](https://hoppscotch.io/).
+2. Go to **Settings**.
+3. Navigate to the **Interceptor** section.
+4. Select **Proxy** under the **Interceptor** section.
+5. Return to the **REST** tab.
+6. Send a `GET` request to the appropriate API endpoint:
+    - [Steam](https://steam.live.bhvrdbd.com/api/v1/utils/contentVersion/version)
+    - [Epic Games](https://egs.live.bhvrdbd.com/api/v1/utils/contentVersion/version)
+
+#### Applying the Override
 
 1. Open the relevant provider file:
    - `src/core/providers/fetchClientVersion.js`
    - `src/core/providers/fetchContentVersion.js`
 2. Locate where `clientVersion` or `contentVersionPayload` is initially assigned a value.
-3. Replace the computed value with a static version string that corresponds to the highest client data version available in your local game installation. Ensure that you save the file after making changes.
+3. Replace the computed value with a static version string that corresponds to the highest client data version available in your local game installation. Save the file after making changes.
 
 Examples:
 ```javascript
@@ -124,7 +144,7 @@ DBD User Client is designed for use with the live branch of Dead by Daylight. It
 The client requires an active internet connection to communicate with Dead by Daylight's live API endpoints.
 
 ### Steam Location Endpoint Limitation
-The `Get Location` endpoint is not supported when authenticating via Steam.
+The `Get Location` API endpoint is not supported when authenticating via Steam.
 
 ### Authentication Token Handling
 For security reasons, authentication tokens are invalidated when the application closes:

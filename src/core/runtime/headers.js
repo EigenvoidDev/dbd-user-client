@@ -2,7 +2,8 @@ export const runtimeHeaders = {
     clientVersion: null,
     contentVersion: null,
     contentSecretKey: null,
-    userAgent: null
+    userAgent: null,
+    longVersion: null
 };
 
 export function setRuntimeHeader(key, value) {

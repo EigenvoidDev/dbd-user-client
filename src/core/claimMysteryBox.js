@@ -12,14 +12,14 @@ const __dirname = path.dirname(__filename);
 const configPath = path.join(__dirname, '../config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 
-export async function claimMysteryBox(platform, bhvrSessionCookie, apiKey) {
+export async function claimMysteryBox(platform, apiKey) {
     const platformConfig = config.platforms[platform];
     if (!platformConfig) {
         throw new Error(`Unsupported platform: ${platform}`);
     }
 
-    if (!bhvrSessionCookie || !apiKey) {
-        throw new Error('Missing Cookie or api-key required to claim your mystery box.');
+    if (!apiKey) {
+        throw new Error('Missing api-key required to claim your mystery box.');
     }
 
     const url = getPlatformUrl(platform, 'mysteryBoxClaim');
@@ -37,9 +37,9 @@ export async function claimMysteryBox(platform, bhvrSessionCookie, apiKey) {
     const headers = {
         ...platformConfig.headers,
         'x-kraken-client-version': clientVersion,
-        'User-Agent': userAgent,
-        'Cookie': bhvrSessionCookie,
-        'api-key': apiKey
+        'x-kraken-analytics-dynamic-contents': '[""]',
+        'api-key': apiKey,
+        'User-Agent': userAgent
     };
 
     const response = await fetch(url, {

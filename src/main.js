@@ -43,7 +43,7 @@ const require = createRequire(import.meta.url);
 const pkg = require('../package.json');
 
 function isLoggedIn(session, message) {
-    if (!session.bhvrSessionCookie || !session.apiKey) {
+    if (!session.apiKey) {
         console.log(`\n${message}`);
         return false;
     }
@@ -162,7 +162,6 @@ async function runActionMenu({ platform, platformAuth }) {
     });
 
     let session = {
-        bhvrSessionCookie: null,
         apiKey: null
     };
 
@@ -208,10 +207,10 @@ async function runActionMenu({ platform, platformAuth }) {
                 await runAction(async () => {
                     console.log('\nInitializing runtime headers...\n');
 
+                    await fetchUserAgent(platform, rl);
                     await fetchClientVersion(platform);
                     await fetchContentVersion(platform);
                     await fetchContentSecretKey();
-                    await fetchUserAgent(platform, rl);
 
                     const authToken = platform === 'steam'
                         ? platformAuth.hexTicket
@@ -222,11 +221,9 @@ async function runActionMenu({ platform, platformAuth }) {
                     const result = await login(platform, authToken);
 
                     if (result) {
-                        session.bhvrSessionCookie = result.bhvrSessionCookie;
                         session.apiKey = result.apiKey;
 
                         console.log('\nLogin successful.\n');
-                        console.log('Cookie:', session.bhvrSessionCookie);
                         console.log('api-key:', session.apiKey);
                     }
                 });
@@ -237,7 +234,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nValidating client version...\n');
-                    const result = await clientVersionCheck(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await clientVersionCheck(platform, session.apiKey);
                     console.log(JSON.stringify(result, null, 2));
                 });
                 break;
@@ -247,7 +244,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nRetrieving HVS flag...\n');
-                    const result = await getMeInUserSamplingPool(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await getMeInUserSamplingPool(platform, session.apiKey);
                     console.log(JSON.stringify(result, null, 2));
                 });
                 break;
@@ -257,7 +254,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nLoading messages...\n');
-                    const result = await loadMessages(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await loadMessages(platform, session.apiKey);
 
                     const filePath = saveToJsonFile({
                         data: result,
@@ -275,7 +272,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nLoading news...\n');
-                    const result = await loadNews(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await loadNews(platform, session.apiKey);
 
                     const filePath = saveToJsonFile({
                         data: result,
@@ -293,7 +290,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nRetrieving location...\n');
-                    const result = await getLocation(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await getLocation(platform, session.apiKey);
                     console.log(JSON.stringify(result, null, 2));
                 });
                 break;
@@ -303,7 +300,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nRetrieving player name...\n');
-                    const result = await getPlayerName(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await getPlayerName(platform, session.apiKey);
                     console.log(JSON.stringify(result, null, 2));
                 });
                 break;
@@ -313,7 +310,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nLoading mystery box status...\n');
-                    const result = await loadMysteryBoxStatus(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await loadMysteryBoxStatus(platform, session.apiKey);
                     console.log(JSON.stringify(result, null, 2));
                 });
                 break;
@@ -323,7 +320,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nLoading free gifts...\n');
-                    const result = await updateGifts(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await updateGifts(platform, session.apiKey);
                     console.log(JSON.stringify(result, null, 2));
                 });
                 break;
@@ -333,7 +330,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nLoading inventory...\n');
-                    const result = await loadInventory(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await loadInventory(platform, session.apiKey);
 
                     const filePath = saveToJsonFile({
                         data: result,
@@ -351,7 +348,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nLoading profile...\n');
-                    const result = await loadFullProfile(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await loadFullProfile(platform, session.apiKey);
                     console.log(result);
                 });
                 break;
@@ -361,7 +358,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nLoading wallet...\n');
-                    const result = await loadWallet(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await loadWallet(platform, session.apiKey);
 
                     const filePath = saveToJsonFile({
                         data: result,
@@ -379,7 +376,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nLoading character data...\n');
-                    const result = await dbdCharacterDataGetAll(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await dbdCharacterDataGetAll(platform, session.apiKey);
 
                     const filePath = saveToJsonFile({
                         data: result,
@@ -397,7 +394,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nLoading loadout presets...\n');
-                    const result = await loadLoadoutPresets(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await loadLoadoutPresets(platform, session.apiKey);
                     console.log(JSON.stringify(result, null, 2));
                 });
                 break;
@@ -407,7 +404,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nLoading player card...\n');
-                    const result = await loadEquippedPlayerCard(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await loadEquippedPlayerCard(platform, session.apiKey);
                     console.log(JSON.stringify(result, null, 2));
                 });
                 break;
@@ -417,7 +414,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nLoading blocklist...\n');
-                    const result = await loadBlocklist(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await loadBlocklist(platform, session.apiKey);
                     console.log(JSON.stringify(result, null, 2));
                 });
                 break;
@@ -427,7 +424,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nAttempting to reset rank and retrieve player pips...\n');
-                    const result = await getPlayerPipsV2(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await getPlayerPipsV2(platform, session.apiKey);
                     console.log(JSON.stringify(result, null, 2));
                 });
                 break;
@@ -437,7 +434,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nRetrieving ban status...\n');
-                    const result = await getBanStatus(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await getBanStatus(platform, session.apiKey);
                     console.log(JSON.stringify(result, null, 2));
                 });
                 break;
@@ -447,7 +444,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nRetrieving player level...\n');
-                    const result = await getPlayerLevel(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await getPlayerLevel(platform, session.apiKey);
                     console.log(JSON.stringify(result, null, 2));
                 });
                 break;
@@ -457,7 +454,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nRetrieving onboarding progress...\n');
-                    const result = await getOnboardingProgress(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await getOnboardingProgress(platform, session.apiKey);
                     
                     const filePath = saveToJsonFile({
                         data: result,
@@ -475,7 +472,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nRetrieving disconnection penalty points...\n');
-                    const result = await getDPP(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await getDPP(platform, session.apiKey);
                     console.log(JSON.stringify(result, null, 2));
                 });
                 break;
@@ -485,7 +482,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nAttempting to claim season refresh rewards...\n');
-                    const result = await claimRankRewards(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await claimRankRewards(platform, session.apiKey);
                     console.log(JSON.stringify(result, null, 2));
                 });
                 break;
@@ -495,7 +492,7 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nAttempting to claim mystery box...\n');
-                    const result = await claimMysteryBox(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await claimMysteryBox(platform, session.apiKey);
                     console.log(JSON.stringify(result, null, 2));
                 });
                 break;
@@ -505,10 +502,9 @@ async function runActionMenu({ platform, platformAuth }) {
 
                 await runAction(async () => {
                     console.log('\nLogging out...\n');
-                    const result = await logout(platform, session.bhvrSessionCookie, session.apiKey);
+                    const result = await logout(platform, session.apiKey);
                     console.log(JSON.stringify(result, null, 2));
 
-                    session.bhvrSessionCookie = null;
                     session.apiKey = null;
                 });
                 break;

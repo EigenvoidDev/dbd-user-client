@@ -1,4 +1,4 @@
-import { setRuntimeHeader } from '../runtime/headers.js';
+import { runtimeHeaders, setRuntimeHeader } from '../runtime/headers.js';
 
 import { compareSemver } from '../../utils/compareSemver.js';
 import { getPlatformUrl } from '../../utils/platformUrls.js';
@@ -10,7 +10,25 @@ export async function fetchContentVersion(platform) {
     }
 
     const url = getPlatformUrl(platform, 'contentVersion');
-    const response = await fetch(url);
+
+    const { userAgent } = runtimeHeaders;
+
+    const missingHeaders = [];
+    if (!userAgent) missingHeaders.push('userAgent');
+
+    if (missingHeaders.length > 0) {
+        throw new Error(`Missing runtime headers: ${missingHeaders.join(', ')}`);
+    }
+
+    const headers = {
+        'Accept': '*/*',
+        'User-Agent': userAgent
+    };
+
+    const response = await fetch(url, {
+        method: 'GET',
+        headers
+    });
 
     if (!response.ok) {
         throw new Error(`Failed to fetch content version: HTTP ${response.status} ${response.statusText}`);

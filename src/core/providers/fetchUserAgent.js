@@ -59,9 +59,11 @@ export async function fetchUserAgent(platform, rl) {
         throw new Error('File content must start with "DBD".');
     }
 
+    setRuntimeHeader('longVersion', content);
+
     const platformIndicator = platform === 'steam' ? 'Windows' : 'EGS';
     const clientOs = config.platforms[platform].headers['x-kraken-client-os'];
-    const userAgent = `DeadByDaylight/${content} (http-legacy) ${platformIndicator}/${clientOs}`;
+    const userAgent = `DeadByDaylight/${content} (http-eventloop) ${platformIndicator}/${clientOs}`;
 
     setRuntimeHeader('userAgent', userAgent);
     console.log(`Fetched user agent (${platform}):`, userAgent);
