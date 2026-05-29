@@ -23,7 +23,7 @@ export async function fetchUserAgent(platform, rl) {
     let filePath = defaultPaths[platform];
 
     if (!fs.existsSync(filePath)) {
-        console.warn(`\nWarning: DeadbyDaylightVersionNumber.txt not found in expected default location for ${platform}.\n`);
+        console.warn(`Warning: DeadByDaylightVersionNumber.txt not found in expected default location for ${platform}.\n`);
 
         if (!rl) {
             throw new Error('No readline interface available to prompt for file path.');
@@ -45,18 +45,18 @@ export async function fetchUserAgent(platform, rl) {
         });
 
         if (!fs.existsSync(filePath)) {
-            throw new Error('File does not exist at the provided file path.');
+            throw new Error('\nFile does not exist at the provided file path.');
         }
     }
 
     if (path.basename(filePath) !== 'DeadByDaylightVersionNumber.txt') {
-        throw new Error('File must be named "DeadByDaylightVersionNumber.txt".');
+        throw new Error('\nFile must be named "DeadByDaylightVersionNumber.txt".');
     }
 
     const content = fs.readFileSync(filePath, 'utf-8').trim();
 
     if (!content.startsWith('DBD')) {
-        throw new Error('File content must start with "DBD".');
+        throw new Error('DeadByDaylightVersionNumber.txt must contain a version string starting with "DBD".');
     }
 
     setRuntimeHeader('longVersion', content);

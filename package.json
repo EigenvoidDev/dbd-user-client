@@ -1,6 +1,6 @@
 {
   "name": "dbd-user-client",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "displayName": "DBD User Client",
   "description": "A desktop client for authenticating and interacting with Dead by Daylight's private API across both Steam and Epic Games.",
